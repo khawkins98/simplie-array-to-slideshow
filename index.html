@@ -1,0 +1,104 @@
+<html>
+<head>
+  <style type="text/css">
+    #slideshow-current { height: 0; }
+
+    /* Feel free to delete this CSS block, demo doesn't have to have this. OOTB CSS makes my eyes bleed. */
+    body { font-family: sans-serif; text-align: center; }
+    #slideshow { margin: 10% auto; }
+  </style>
+</head>
+
+<body>
+  <div id="slideshow">
+    <div id="slideshow-current"></div>
+    <div id="slideshow-next"></div>
+    <div id="slideshow-loader">Loading... Maybe you want a holder image?</div>
+  </div>
+
+  <script language="JavaScript">
+
+    /* ------ BEGIN Not my code --------- */
+    // Some JS to do our fading. If you have jQuery, this wouldn't be needed.
+    // This is from: http://www.claindsilva.com/javascript/how-to-cross-fade-anything-with-javascript-javascript-fade-effect/
+    function fadeOut(id,val){
+      if(isNaN(val)){ val = 9;}
+      document.getElementById(id).style.opacity='0.'+val;
+      //For IE
+      document.getElementById(id).style.filter='alpha(opacity='+val+'0)';
+      if(val>0){
+        val--;
+        setTimeout('fadeOut("'+id+'",'+val+')',90);
+      }else{return;}
+    }
+     
+    function fadeIn(id,val){
+      if(isNaN(val)){ val = 0;}
+      document.getElementById(id).style.opacity='0.'+val;
+      //For IE
+      document.getElementById(id).style.filter='alpha(opacity='+val+'0)';
+      
+      if(val<9){
+        val++;
+        setTimeout('fadeIn("'+id+'",'+val+')',90);
+       }else{return;}
+    }    
+    /* ------ END Not my code --------- */
+
+    // A template for how our images will be inserted.
+    // We need an "A" and a "B" to do our fading.
+    var slideshowImagesImageA = document.createElement("img");
+    var slideshowImagesImageB = document.createElement("img");
+    // Maybe set a default width?
+    slideshowImagesImageA.setAttribute("width","300");
+    slideshowImagesImageB.setAttribute("width","300");
+    slideshowImagesImageA.setAttribute("height","500");
+    slideshowImagesImageB.setAttribute("height","500");
+
+    // How many ms between each slide?
+    var slideshowImagesSpeed = 2500; 
+
+    // An array of the images we want to use (with paths).
+    // Here's some demo data (Maybe you're loading via JSON?).
+    var slideshowImages=new Array();
+    slideshowImages[0] = "images/image-0.jpg";
+    slideshowImages[1] = "images/image-1.jpg";
+    slideshowImages[2] = "images/image-2.jpg";
+    slideshowImages[3] = "images/image-3.jpg";
+
+    var slideshowImagesCount = slideshowImages.length-1;
+    var slideshowImagesCurrent = 0; // Why start at the begining? It's oh so boring. Fine, 0.
+
+    function slideshowImagesAdvance() {
+      // Prepare the image.
+      slideshowImagesImageA.setAttribute("src",slideshowImages[slideshowImagesCurrent]);
+      slideshowImagesImageA.setAttribute("id" ,"slideshowImages-"+slideshowImagesCurrent);
+
+      // Insert the image.
+      document.getElementById('slideshow-current').appendChild(slideshowImagesImageA);
+
+      // Prepare the next image.
+      if (slideshowImagesCurrent<slideshowImagesCount) slideshowImagesCurrent++
+        else slideshowImagesCurrent = 0;
+      slideshowImagesImageB.setAttribute("src",slideshowImages[slideshowImagesCurrent]);
+      slideshowImagesImageB.setAttribute("id" ,"slideshowImages-"+slideshowImagesCurrent);
+      document.getElementById('slideshow-next').appendChild(slideshowImagesImageB);
+
+      fadeOut('slideshow-current');
+      fadeIn ('slideshow-next');
+
+      // Keep the party going.
+      setTimeout("slideshowImagesAdvance()",slideshowImagesSpeed);
+    }
+
+    // Clear any holder content.
+    document.getElementById('slideshow-loader').innerHTML = '';
+
+    // Und los!
+    // (Remember, if you're use barebones JS, you'll want your HTML to be loaded before the script runs.)
+    slideshowImagesAdvance();
+
+  </script>
+
+</body>
+</html>
