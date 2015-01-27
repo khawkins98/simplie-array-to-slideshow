@@ -2,6 +2,8 @@
 <head>
   <style type="text/css">
     #slideshow-current { height: 0; }
+    /* Your slideshow size. */
+    #slideshow img { width: 300px; height: 500px; }
 
     /* Feel free to delete this CSS block, demo doesn't have to have this. OOTB CSS makes my eyes bleed. */
     body { font-family: sans-serif; text-align: center; }
@@ -17,7 +19,6 @@
   </div>
 
   <script language="JavaScript">
-
     /* ------ BEGIN Not my code --------- */
     // Some JS to do our fading. If you have jQuery, this wouldn't be needed.
     // This is from: http://www.claindsilva.com/javascript/how-to-cross-fade-anything-with-javascript-javascript-fade-effect/
@@ -45,16 +46,6 @@
     }    
     /* ------ END Not my code --------- */
 
-    // A template for how our images will be inserted.
-    // We need an "A" and a "B" to do our fading.
-    var slideshowImagesImageA = document.createElement("img");
-    var slideshowImagesImageB = document.createElement("img");
-    // Maybe set a default width?
-    slideshowImagesImageA.setAttribute("width","300");
-    slideshowImagesImageB.setAttribute("width","300");
-    slideshowImagesImageA.setAttribute("height","500");
-    slideshowImagesImageB.setAttribute("height","500");
-
     // How many ms between each slide?
     var slideshowImagesSpeed = 2500; 
 
@@ -69,21 +60,22 @@
     var slideshowImagesCount = slideshowImages.length-1;
     var slideshowImagesCurrent = 0; // Why start at the begining? It's oh so boring. Fine, 0.
 
-    function slideshowImagesAdvance() {
-      // Prepare the image.
-      slideshowImagesImageA.setAttribute("src",slideshowImages[slideshowImagesCurrent]);
-      slideshowImagesImageA.setAttribute("id" ,"slideshowImages-"+slideshowImagesCurrent);
+    // We need an "A" and a "B" image to do our fading.
+    var slideshowImagesImageA = document.createElement("img");
+    var slideshowImagesImageB = document.createElement("img");
 
-      // Insert the image.
+    function slideshowImagesAdvance() {
+      // Prepare and insert the image.
+      slideshowImagesImageA.setAttribute("src",slideshowImages[slideshowImagesCurrent]);
       document.getElementById('slideshow-current').appendChild(slideshowImagesImageA);
 
       // Prepare the next image.
       if (slideshowImagesCurrent<slideshowImagesCount) slideshowImagesCurrent++
         else slideshowImagesCurrent = 0;
       slideshowImagesImageB.setAttribute("src",slideshowImages[slideshowImagesCurrent]);
-      slideshowImagesImageB.setAttribute("id" ,"slideshowImages-"+slideshowImagesCurrent);
       document.getElementById('slideshow-next').appendChild(slideshowImagesImageB);
 
+      // Animate.
       fadeOut('slideshow-current');
       fadeIn ('slideshow-next');
 
@@ -97,8 +89,6 @@
     // Und los!
     // (Remember, if you're use barebones JS, you'll want your HTML to be loaded before the script runs.)
     slideshowImagesAdvance();
-
   </script>
-
 </body>
 </html>
